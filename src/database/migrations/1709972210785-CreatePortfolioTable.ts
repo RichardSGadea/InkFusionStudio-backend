@@ -21,6 +21,11 @@ export class CreatePortfolioTable1709972210785 implements MigrationInterface {
                         length: "120"
                     },
                     {
+                        name: "image",
+                        type: "varchar",
+                        length: "255"
+                    },
+                    {
                         name: "price",
                         type: "float",
                     },

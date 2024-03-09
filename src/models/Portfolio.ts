@@ -9,6 +9,9 @@ export class Portfolio extends BaseEntity{
     @Column({name: "name"})
     name!: string;
 
+    @Column({name:"image"})
+    image!: string
+
     @Column({name: "price"})
     price!: number;
 

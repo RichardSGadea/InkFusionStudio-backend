@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { User } from "./User";
+import { Portfolio } from "./Portfolio";
 
 @Entity("appointments")
 export class Appointment extends BaseEntity{
@@ -17,4 +19,33 @@ export class Appointment extends BaseEntity{
 
     @Column({name: "status"})
     status!: boolean;
+
+    //Relation Appointment {0..n}--{1} User(client)
+    
+    @ManyToOne(()=>User, (user)=> user.clientAppointments)
+    @JoinColumn({name: "client_id"})
+    client!: User;
+
+    //Relation Appointment {0..n}--{1} User(worker)
+
+    @ManyToOne(()=>User, (user)=> user.workerAppointments)
+    @JoinColumn({name: "worker_id"})
+    worker!: User;
+
+    //Relation Appointment {0..n}--{0..n} Portfolio
+    @ManyToMany(()=>Portfolio,(portfolio) => portfolio.appointments)
+    @JoinTable({
+        name: "appointment_portfolio",
+        joinColumn:{
+            name:"appointment_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn:{
+            name:"portfolio_id",
+            referencedColumnName: "id"
+        }
+    })
+    appointmentPortfolios!: Portfolio[]
+
+
 }

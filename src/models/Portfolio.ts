@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Appointment } from "./Appointment";
 
 @Entity("portfolio")
 export class Portfolio extends BaseEntity{
@@ -17,5 +18,7 @@ export class Portfolio extends BaseEntity{
     @Column({name: "updated_at"})
     updatedAt!: Date;
 
-
+    //Relation Portfolio {0..n}--{0..n} Appointment
+    @ManyToMany(()=>Appointment, (appointment) => appointment.appointmentPortfolios)
+    appointments?: Appointment[]
 }

@@ -20,7 +20,7 @@ export class User extends BaseEntity{
     password!: string;
 
     @Column({name: "phone_number"})
-    phoneNumber!: number;
+    phoneNumber!: string;
 
     @Column({name: "is_active"})
     isActive!: boolean;

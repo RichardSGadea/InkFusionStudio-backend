@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "nodemon --files src/server.ts"
+    "dev": "nodemon --files src/server.ts",
+    "db:drop":"npx typeorm-ts-node-commonjs schema:drop -d ./src/database/data-source.ts",
+    "db:migrate": "npx typeorm-ts-node-commonjs migration:run -d ./src/database/data-source.ts"
   },
   "keywords": [],
   "author": "",

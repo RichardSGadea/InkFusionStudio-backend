@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { DataSource } from "typeorm";
 
 // Module that loads environment variables from a .env file
@@ -13,5 +14,5 @@ export const dataSource = new DataSource({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: [],
-    migrations: [],
+    migrations: [`${__dirname}/migrations/**/*{.ts, .js}`],
 })

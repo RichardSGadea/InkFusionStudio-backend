@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Appointment } from "./Appointment";
+import { AppointmentPortfolio } from "./AppointmentPortfolio";
 
 @Entity("portfolio")
 export class Portfolio extends BaseEntity{
@@ -24,4 +25,8 @@ export class Portfolio extends BaseEntity{
     //Relation Portfolio {0..n}--{0..n} Appointment
     @ManyToMany(()=>Appointment, (appointment) => appointment.appointmentPortfolios)
     appointments?: Appointment[]
+
+    //Relation Portfolio {1}--{0..n} AppointmentPortfolio 
+    @OneToMany(()=> AppointmentPortfolio, (appointmentPortfolio)=>appointmentPortfolio.portfolio)
+    appointment_portfolios?:AppointmentPortfolio;
 }

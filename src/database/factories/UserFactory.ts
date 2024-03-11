@@ -9,7 +9,7 @@ export class UserFactory extends Factory<User>{
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
             email: faker.internet.email(),
-            password: bcrypt.hashSync('12345678',10),
+            password: bcrypt.hashSync('2345678',10),
             isActive: true,
         } as User;
     }

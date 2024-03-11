@@ -35,11 +35,6 @@ export class CreateUsersTable1709971479284 implements MigrationInterface {
                         length: "120"
                     },
                     {
-                        name: "phone_number",
-                        type: "varchar",
-                        length: "11",
-                    },
-                    {
                         name: "is_active",
                         type: "boolean",
                         default: true,

@@ -19,8 +19,6 @@ export class User extends BaseEntity{
     @Column({name: "password"})
     password!: string;
 
-    @Column({name: "phone_number"})
-    phoneNumber!: string;
 
     @Column({name: "is_active"})
     isActive!: boolean;

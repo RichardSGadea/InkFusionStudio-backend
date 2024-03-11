@@ -4,6 +4,6 @@ export const SeederConfig = {
     CLIENTS: 120,
     APPOINTMENTS: 60,
     PORTFOLIOS: 100,
-    PORTFOLIO_PER_APPOINTMENT: Math.floor(Math.random()*3),
+    PORTFOLIO_PER_APPOINTMENT: 2,
 
 };

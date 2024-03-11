@@ -23,6 +23,9 @@ export class User extends BaseEntity{
     @Column({name: "is_active"})
     isActive!: boolean;
 
+    @Column({name: "role_id"})
+    roleId!: number;
+
     //Relation: User {0..n}...{1} Role
 
     @ManyToOne(()=>Role,(role)=>role.users)

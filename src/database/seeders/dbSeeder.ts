@@ -1,3 +1,4 @@
+import { AppointmentSeeder } from "./AppointmentSeeder";
 import { PortfolioSeeder } from "./PortfolioSeeder";
 import { RoleSeeder } from "./RoleSeeder";
 import { UserSeeder } from "./UserSeeder";
@@ -7,5 +8,6 @@ import { UserSeeder } from "./UserSeeder";
     await new RoleSeeder().start();
     await new UserSeeder().start();
     await new PortfolioSeeder().start();
+    await new AppointmentSeeder().start();
 
 })();

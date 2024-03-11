@@ -1,3 +1,4 @@
+import { PortfolioSeeder } from "./PortfolioSeeder";
 import { RoleSeeder } from "./RoleSeeder";
 import { UserSeeder } from "./UserSeeder";
 
@@ -5,5 +6,6 @@ import { UserSeeder } from "./UserSeeder";
     console.log("Starting seeders...");
     await new RoleSeeder().start();
     await new UserSeeder().start();
+    await new PortfolioSeeder().start();
 
 })();

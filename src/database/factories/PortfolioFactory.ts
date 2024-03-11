@@ -7,7 +7,7 @@ export class PortfolioFactory extends Factory<Portfolio>{
         return {
             name: faker.lorem.sentence({min: 3, max: 5}),
             image: faker.image.urlLoremFlickr(),
-            price: +faker.finance.amount({min:5,max:250,dec: 2, symbol: '€'}),
+            price: faker.number.float({min: 10, max:150, fractionDigits:2}),
             createdAt: faker.date.past(),
             updatedAt: faker.date.future(),
         } as Portfolio;

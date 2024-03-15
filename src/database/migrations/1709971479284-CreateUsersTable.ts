@@ -22,7 +22,8 @@ export class CreateUsersTable1709971479284 implements MigrationInterface {
                     {
                         name: "last_name",
                         type: "varchar",
-                        length: "255"
+                        length: "255",
+                        isNullable: true
                     },
                     {
                         name: "email",
@@ -41,7 +42,7 @@ export class CreateUsersTable1709971479284 implements MigrationInterface {
                     },
                     {
                         name: "role_id",
-                        type: "int",
+                        type: "int"
                     },
                 ],
                 foreignKeys:[

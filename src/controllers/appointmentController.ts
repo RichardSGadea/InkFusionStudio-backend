@@ -200,15 +200,76 @@ export const appointmentController = {
     async delete(req: Request, res: Response): Promise<void> {
         try {
 
+            const userId = Number(req.tokenData.userId);
+
+            const user = await User.findOne({
+                where: {
+                    id: userId,
+                }
+            })
+
+            if (!user) {
+                res.status(404).json({ message: "Restart Login, invalid token provided" });
+                return;
+            }
+
+            const appointmentId = Number(req.params.id)
+
+            const appointmentToDelete = await Appointment.findOne({
+                where: {
+                    id: appointmentId,
+                    clientId: userId
+                }
+            })
+
+            if (!appointmentToDelete) {
+                res.status(404).json({
+                    message: "Appointment not found"
+                })
+                return;
+            }
+
+            const appointmentPortfolios = await AppointmentPortfolio.find({where:{appointmentId:appointmentId}})
+            for(let element of appointmentPortfolios){
+                await AppointmentPortfolio.delete(element.id);
+            }
+            
+            await Appointment.delete(appointmentId);
+
+            res.status(200).json({ message: "Appointment deleted successfully" });
+
         } catch (error) {
             res.status(500).json({
+                error:error,
                 message: "Failed to delete appointment"
             })
         }
     },
 
-    async getOfClient(req: Request, res: Response): Promise<void> {
+    async getCalendarClient(req: Request, res: Response): Promise<void> {
         try {
+
+            const userId = Number(req.tokenData.userId);
+
+            const appointmentsForShows = await Appointment.find({
+                relations:{
+                    appointmentPortfolios:true
+                },
+                select:{
+                    id:true,
+                    appointmentDate:true,
+                    workerId:true,
+                    appointmentPortfolios:{
+                        name:true,
+                        price:true,
+                    },
+                },
+                where:{
+                    clientId:userId
+                }
+            })
+
+            res.json(appointmentsForShows)
 
         } catch (error) {
             res.status(500).json({
@@ -217,8 +278,30 @@ export const appointmentController = {
         }
     },
 
-    async getOfWorker(req: Request, res: Response): Promise<void> {
+    async getCalendarWorker(req: Request, res: Response): Promise<void> {
         try {
+
+            const userId = Number(req.tokenData.userId);
+
+            const appointmentsForShows = await Appointment.find({
+                relations:{
+                    appointmentPortfolios:true
+                },
+                select:{
+                    id:true,
+                    appointmentDate:true,
+                    clientId:true,
+                    appointmentPortfolios:{
+                        name:true,
+                        price:true,
+                    },
+                },
+                where:{
+                    workerId:userId
+                }
+            })
+
+            res.json(appointmentsForShows)
 
         } catch (error) {
             res.status(500).json({

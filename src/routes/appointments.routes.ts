@@ -10,18 +10,12 @@ router.post("/", auth, appointmentController.create)
 
 router.put("/:id",auth, appointmentController.update)
 
-router.delete("/", (req: Request, res: Response) => {
-    res.send("Deleted appointment by id") 
-})
+router.delete("/:id", auth, appointmentController.delete)
 
 //route only clients
-router.get("/client", (req: Request, res: Response) => {
-    res.send("get user appointments") 
-})
+router.get("/client", auth, appointmentController.getCalendarClient)
 
 //route only workers
-router.get("/worker", (req: Request, res: Response) => {
-    res.send("get worker appointments") 
-})
+router.get("/worker", auth,appointmentController.getCalendarWorker)
 
 export default router;

@@ -21,6 +21,12 @@ export class Appointment extends BaseEntity{
     @Column({name: "status"})
     status!: boolean;
 
+    @Column({name: "worker_id"})
+    workerId!: number;
+
+    @Column({name: "client_id"})
+    clientId!: number;
+
     //Relation Appointment {0..n}--{1} User(client)
     
     @ManyToOne(()=>User, (user)=> user.clientAppointments)

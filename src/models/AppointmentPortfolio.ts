@@ -7,6 +7,12 @@ export class AppointmentPortfolio extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
+    @Column({name: "appointment_id"})
+    appointmentId!: number;
+
+    @Column({name: "portfolio_id"})
+    portfolioId!: number;
+
     @ManyToOne(() => Appointment, (appointment)=> appointment.appointment_portfolios)
     @JoinColumn({name: "appointment_id"})
     appointment!: Appointment[];

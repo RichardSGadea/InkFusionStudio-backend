@@ -1,19 +1,15 @@
 import express, {Request, Response} from "express";
+import { userController } from "../controllers/userController";
+import { auth } from "../middlewares/auth";
 
 const router = express.Router();
 
 //Users routes
-router.get("/profile", (req: Request, res: Response) => {
-    res.send("get user profile") 
-})
+router.get("/profile",auth, userController.getProfile)
 
-router.put("/profile", (req: Request, res: Response) => {
-    res.send("Modified user profile") 
-})
+router.put("/profile", auth, userController.updateProfile)
 
-router.get("/workers", (req: Request, res: Response) => {
-    res.send("Get all workers") 
-})
+router.get("/workers", auth, userController.getWorkers)
 
 export default router;
 

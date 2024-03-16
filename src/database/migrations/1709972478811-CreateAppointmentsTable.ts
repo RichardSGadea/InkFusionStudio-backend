@@ -16,7 +16,8 @@ export class CreateAppointmentsTable1709972478811 implements MigrationInterface 
                     },
                     {
                         name: "appointment_date",
-                        type: "date",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP",
                     },
                     {
                         name: "created_at",

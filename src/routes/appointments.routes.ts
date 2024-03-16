@@ -8,9 +8,7 @@ const router = express.Router();
 
 router.post("/", auth, appointmentController.create)
 
-router.put("/", (req: Request, res: Response) => {
-    res.send("Modified appointment by id") 
-})
+router.put("/:id",auth, appointmentController.update)
 
 router.delete("/", (req: Request, res: Response) => {
     res.send("Deleted appointment by id") 

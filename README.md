@@ -197,3 +197,6 @@ Para empezar tenemos una tabla de "roles" relacionada con otra de "users". Estab
 ## Contribuciones
 Si alguien desea contribuir en el desarrollo de este backend, puede ponerse en contacto con nosotros en richardsgadea@gmail.com o le invitamos a abrir un [Issue](https://github.com/RichardSGadea/InnkFusionStudio/issues) o enviar una [Pull request](https://github.com/RichardSGadea/InnkFusionStudio/pulls)
 
+## Licencia
+
+⚖️ Proyecto bajo la Licencia MIT.  `LICENSE` 

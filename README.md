@@ -1,6 +1,6 @@
 <p>
    <div align="center">
-      <img src="./img/logoStudio.jpg" style="max-width: 100%">
+      <img src="./img/logoStudio.jpg" style="max-width: 100%" height="400em">
    </div>    
 </p>
 <p align="center">☠✒Backend de un estudio de tatuajes✒☠
@@ -23,7 +23,6 @@ Proyecto del Bootcamp de Full Stack Developer de Geekshubs Academy.</p>
     <li><a href="#endpoints">Endpoints</a></li>
     <li><a href="#futuras-modificaciones">Futuras Modificaciones</a></li>
     <li><a href="#contribuciones">Contribuciones</a></li>
-    <li><a href="#autor">Autor</a></li>
     <li><a href="#licencia">Licencia</a></li>
 </ol>
 
@@ -97,7 +96,7 @@ Para empezar tenemos una tabla de "roles" relacionada con otra de "users". Estab
 5. Para rellenar la tabla de datos inventados en el momento de desarrollo se puede hacer de dos maneras, una manualmente y dos con los factories, seeders y la librería faker. `npx ts-node ./src/database/seeders/dbSeeder.ts`
 6. En desarrollo, lo hacemos funcionar y actualizarse en tiempo real mediante con este comando `npm run dev`
 7. Para compilar usamos `npm run build`
-8. Wn producción, con el comando `npm run start`
+8. En producción, con el comando `npm run start`
 9. Usamos los endpoints almacenados en la carpeta routes para testear las distintas funcionalidades que se han diseñado.
 
 </details>
@@ -192,5 +191,9 @@ Para empezar tenemos una tabla de "roles" relacionada con otra de "users". Estab
 ## Futuras Modificaciones
 
 🚀 Mejorar el CRUD de "appointments" trabajando no solo con la fecha si no con las horas en las que supuestamente estaría abierto el estudio.
+
 🚀 Añadir CRUD para Portfolio
+
+## Contribuciones
+Si alguien desea contribuir en el desarrollo de este backend, puede ponerse en contacto con nosotros en richardsgadea@gmail.com o le invitamos a abrir un [Issue](https://github.com/RichardSGadea/InnkFusionStudio/issues) o enviar una [Pull request](https://github.com/RichardSGadea/InnkFusionStudio/pulls)
 

@@ -82,21 +82,21 @@ Para empezar tenemos una tabla de "roles" relacionada con otra de "users". Estab
 3. Conectamos nuestro repositorio con la base de datos mediante las variables de entorno que se encuentran en el archivo .env
 
     ``` js
-    	// Environment variables
+    // Environment variables
 	NODE_ENV= 
 
-	// Server configuration
+   // Server configuration
 	PORT=
 
-	// Database configuration
-         DB_HOST=
-         DB_PORT=
-         DB_USER=
-         DB_PASSWORD=
-         DB_DATABASE=  
+   // Database configuration
+    	DB_HOST=
+    	DB_PORT=
+    	DB_USER=
+    	DB_PASSWORD=
+    	DB_DATABASE=  
 
-    	// Secret Token
-         JWT_SECRET= ""
+   // Secret Token
+    	JWT_SECRET= ""
     ```  
 
 4. Ejecutamos las migraciones `npx typeorm-ts-node-commonjs migration:run -d ./src/database/data-source.ts`

@@ -82,17 +82,24 @@ Para empezar tenemos una tabla de "roles" relacionada con otra de "users". Estab
 3. Conectamos nuestro repositorio con la base de datos mediante las variables de entorno que se encuentran en el archivo .env
 
     ``` js
-         DB_HOST=
-         DB_PORT=
-         DB_USER=
-         DB_PASSWORD=
-         DB_DATABASE=  
+    // Environment variables
+	NODE_ENV= 
 
-          
-         JWT_SECRET= ""
+   // Server configuration
+	PORT=
+
+   // Database configuration
+    	DB_HOST=
+    	DB_PORT=
+    	DB_USER=
+    	DB_PASSWORD=
+    	DB_DATABASE=  
+
+   // Secret Token
+    	JWT_SECRET= ""
     ```  
 
-4. Ejecutamos las migraciones `npx typeorm-ts-node-commonjs migration:run -d ./src/db.ts`
+4. Ejecutamos las migraciones `npx typeorm-ts-node-commonjs migration:run -d ./src/database/data-source.ts`
 5. Para rellenar la tabla de datos inventados en el momento de desarrollo se puede hacer de dos maneras, una manualmente y dos con los factories, seeders y la librería faker. `npx ts-node ./src/database/seeders/dbSeeder.ts`
 6. En desarrollo, lo hacemos funcionar y actualizarse en tiempo real mediante con este comando `npm run dev`
 7. Para compilar usamos `npm run build`

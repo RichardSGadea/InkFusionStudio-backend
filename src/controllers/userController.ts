@@ -103,4 +103,44 @@ export const userController = {
             });
         }
     },
+
+    async getAllUsers(req:Request, res:Response): Promise<void> {
+        try {
+            const page = Number(req.query.page) || 1;
+
+            const limit = Number(req.query.limit) || 10;
+
+            const [clients, totalClients] = await User.findAndCount({
+                
+                select: {
+                    id:true,
+                    firstName:true,
+                    email:true,
+                },
+                where:{
+                    role:UserRoles.CLIENT
+                },
+                skip: (page - 1) * limit,
+                take: limit
+            });
+
+            if (totalClients === 0) {
+                res.status(404).json({ message: "Workers not found" });
+                return;
+            }
+
+            const totalPages = Math.ceil(totalClients / limit);
+
+            res.status(200).json({
+                clients: clients,
+                current_page: page,
+                per_page: limit,
+                total_pages: totalPages,
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to retrieve users",
+            });
+        }
+    }
 }

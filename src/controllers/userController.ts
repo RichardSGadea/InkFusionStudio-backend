@@ -145,6 +145,47 @@ export const userController = {
         }
     },
 
+    async getAllWorkers(req:Request, res:Response): Promise<void> {
+        try {
+            const page = Number(req.query.page) || 1;
+
+            const limit = Number(req.query.limit) || 10;
+
+            const [workers, totalWorkers] = await User.findAndCount({
+                
+                select: {
+                    id:true,
+                    firstName:true,
+                    email:true,
+                    isActive:true,
+                },
+                where:{
+                    role:UserRoles.WORKER
+                },
+                skip: (page - 1) * limit,
+                take: limit
+            });
+
+            if (totalWorkers === 0) {
+                res.status(404).json({ message: "Workers not found" });
+                return;
+            }
+
+            const totalPages = Math.ceil(totalWorkers / limit);
+
+            res.status(200).json({
+                workers: workers,
+                current_page: page,
+                per_page: limit,
+                total_pages: totalPages,
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to retrieve users",
+            });
+        }
+    },
+
     async getUserById(req:Request, res:Response): Promise<void> {
         try {
             const userId = Number(req.params.id);

@@ -15,6 +15,7 @@ router.get("/workers", auth, userController.getWorkers)
 //Routes protected
 
 router.get("/allUsers", auth, authorize(["admin"]),userController.getAllUsers)
+router.get("/:id", auth, authorize(["admin"]),userController.getUserById)
 
 export default router;
 

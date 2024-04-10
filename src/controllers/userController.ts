@@ -116,6 +116,7 @@ export const userController = {
                     id:true,
                     firstName:true,
                     email:true,
+                    isActive:true,
                 },
                 where:{
                     role:UserRoles.CLIENT
@@ -141,6 +142,27 @@ export const userController = {
             res.status(500).json({
                 message: "Failed to retrieve users",
             });
+        }
+    },
+
+    async getUserById(req:Request, res:Response): Promise<void> {
+        try {
+            const userId = Number(req.params.id);
+    
+            const userToShow = await User.findOne({
+                where: { id: userId },
+            })
+    
+            if (!userToShow) {
+                res.status(404).json({ message: "User not found" });
+                return;
+            }
+    
+            res.json(userToShow);
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to get user profile"
+            })
         }
     }
 }

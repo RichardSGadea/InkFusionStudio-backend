@@ -16,6 +16,22 @@ export const authController = {
                 })
                 return;
             }
+            
+            const emailRegex = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i
+
+            if (!emailRegex.test(email)) {
+                res.status(400).json({
+                    message: "Invalid email"
+                })
+                return;
+            }
+
+            if(password.length < 8 || (!password.match(/[a-z]/) && !password.match(/[A-Z]/)) || !password.match(/\d/)){
+                res.status(400).json({
+                    message: "Invalid password"
+                })
+                return;
+            }
 
             const users = await User.find();
             for (let element of users) {
@@ -110,7 +126,7 @@ export const authController = {
             );
 
             res.status(200).json({
-                message:"Login successfully",
+                message: "Login successfully",
                 token,
             })
 

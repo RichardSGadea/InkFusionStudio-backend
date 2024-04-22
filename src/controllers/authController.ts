@@ -19,19 +19,24 @@ export const authController = {
             
             const emailRegex = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i
 
-            if (!emailRegex.test(email)) {
+            if ( (!emailRegex.test(email)) && (password.length < 8 || (!password.match(/[a-z]/) && !password.match(/[A-Z]/)) || !password.match(/\d/))) {
+                res.status(400).json({
+                    message: "Invalid email and password"
+                })
+                return;
+            } else if (!emailRegex.test(email)) {
                 res.status(400).json({
                     message: "Invalid email"
                 })
                 return;
-            }
-
-            if(password.length < 8 || (!password.match(/[a-z]/) && !password.match(/[A-Z]/)) || !password.match(/\d/)){
+            } else if(password.length < 8 || (!password.match(/[a-z]/) && !password.match(/[A-Z]/)) || !password.match(/\d/)){
                 res.status(400).json({
                     message: "Invalid password"
                 })
                 return;
             }
+
+            
 
             const users = await User.find();
             for (let element of users) {

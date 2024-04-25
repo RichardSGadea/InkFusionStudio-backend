@@ -17,6 +17,7 @@ router.get("/workers", auth, userController.getWorkers)
 router.get("/allUsers", auth, authorize(["admin"]),userController.getAllUsers)
 router.get("/allWorkers", auth, authorize(["admin"]),userController.getAllWorkers)
 router.get("/:id", auth, authorize(["admin"]),userController.getUserById)
+router.put("/:id", auth, authorize(["admin"]),userController.updateUserById)
 
 export default router;
 

@@ -71,14 +71,14 @@ export const userController = {
             const limit = Number(req.query.limit) || 10;
 
             const [workers, totalWorkers] = await User.findAndCount({
-                
+
                 select: {
-                    id:true,
-                    firstName:true,
-                    email:true,
+                    id: true,
+                    firstName: true,
+                    email: true,
                 },
-                where:{
-                    role:UserRoles.WORKER
+                where: {
+                    role: UserRoles.WORKER
                 },
                 skip: (page - 1) * limit,
                 take: limit
@@ -104,22 +104,22 @@ export const userController = {
         }
     },
 
-    async getAllUsers(req:Request, res:Response): Promise<void> {
+    async getAllUsers(req: Request, res: Response): Promise<void> {
         try {
             const page = Number(req.query.page) || 1;
 
             const limit = Number(req.query.limit) || 10;
 
             const [clients, totalClients] = await User.findAndCount({
-                
+
                 select: {
-                    id:true,
-                    firstName:true,
-                    email:true,
-                    isActive:true,
+                    id: true,
+                    firstName: true,
+                    email: true,
+                    isActive: true,
                 },
-                where:{
-                    role:UserRoles.CLIENT
+                where: {
+                    role: UserRoles.CLIENT
                 },
                 skip: (page - 1) * limit,
                 take: limit
@@ -145,22 +145,22 @@ export const userController = {
         }
     },
 
-    async getAllWorkers(req:Request, res:Response): Promise<void> {
+    async getAllWorkers(req: Request, res: Response): Promise<void> {
         try {
             const page = Number(req.query.page) || 1;
 
             const limit = Number(req.query.limit) || 10;
 
             const [workers, totalWorkers] = await User.findAndCount({
-                
+
                 select: {
-                    id:true,
-                    firstName:true,
-                    email:true,
-                    isActive:true,
+                    id: true,
+                    firstName: true,
+                    email: true,
+                    isActive: true,
                 },
-                where:{
-                    role:UserRoles.WORKER
+                where: {
+                    role: UserRoles.WORKER
                 },
                 skip: (page - 1) * limit,
                 take: limit
@@ -186,24 +186,57 @@ export const userController = {
         }
     },
 
-    async getUserById(req:Request, res:Response): Promise<void> {
+    async getUserById(req: Request, res: Response): Promise<void> {
         try {
             const userId = Number(req.params.id);
-    
+
             const userToShow = await User.findOne({
                 where: { id: userId },
             })
-    
+
             if (!userToShow) {
                 res.status(404).json({ message: "User not found" });
                 return;
             }
-    
+
             res.json(userToShow);
         } catch (error) {
             res.status(500).json({
                 message: "Failed to get user profile"
             })
         }
-    }
+    },
+
+    async updateUserById(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = Number(req.params.id);
+
+            const { password, role, ...resUserData } = req.body
+
+            const userToUpdate = await User.findOne({
+                where: { id: userId },
+            })
+
+            if (password) {
+                const hashedPassword = bcrypt.hashSync(password, 10);
+                userToUpdate!.password = hashedPassword
+            }
+
+            const updatedUser: Partial<User> = {
+                ...userToUpdate,
+                ...resUserData,
+            };
+
+            await User.save(updatedUser);
+
+            res.status(202).json({
+                message: "User profile updated successfully"
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to get user profile"
+            })
+        }
+    },
 }

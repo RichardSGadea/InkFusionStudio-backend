@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import { UserRoles } from "../constants/UserRoles";
+import { Appointment } from "../models/Appointment";
+import { AppointmentPortfolio } from "../models/AppointmentPortfolio";
 
 export const userController = {
     async getProfile(req: Request, res: Response): Promise<void> {
@@ -236,6 +238,48 @@ export const userController = {
         } catch (error) {
             res.status(500).json({
                 message: "Failed to get user profile"
+            })
+        }
+    },
+    async deleteUserById(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = Number(req.params.id);
+
+            const userToDelete = await User.findOne({
+                where: {
+                    id: userId
+                }
+            })
+
+            if (!userToDelete) {
+                res.status(404).json({
+                    message: "User not found"
+                })
+                return;
+            }
+
+            const userAppointments = await Appointment.find({
+                where:{
+                    clientId:userId
+                }
+            })
+
+            for(let appointment of userAppointments){
+                const appointmentPortfolios = await AppointmentPortfolio.find({where:{appointmentId:appointment.id}})
+                for(let element of appointmentPortfolios){
+                    await AppointmentPortfolio.delete(element.id);
+                }
+                await Appointment.delete(appointment.id)
+            }
+
+            await User.delete(userId)
+
+            res.status(200).json({ message: "User deleted successfully" });
+
+
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to delete user"
             })
         }
     },

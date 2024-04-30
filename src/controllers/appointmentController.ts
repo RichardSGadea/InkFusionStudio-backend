@@ -4,7 +4,7 @@ import { UserRoles } from "../constants/UserRoles";
 import { Portfolio } from "../models/Portfolio";
 import { Appointment } from "../models/Appointment";
 import { AppointmentPortfolio } from "../models/AppointmentPortfolio";
-import { error, log } from "console";
+
 
 
 export const appointmentController = {
@@ -266,6 +266,9 @@ export const appointmentController = {
                 },
                 where:{
                     clientId:userId
+                },
+                order:{
+                    appointmentDate:"ASC"
                 }
             })
 
@@ -284,13 +287,18 @@ export const appointmentController = {
             const userId = Number(req.tokenData.userId);
 
             const appointmentsForShows = await Appointment.find({
-                relations:{
-                    appointmentPortfolios:true
+                relations:{ 
+                    appointmentPortfolios:true,
+                    client:true
                 },
                 select:{
                     id:true,
                     appointmentDate:true,
                     clientId:true,
+                    client:{
+                        firstName:true,
+                        email:true,
+                    },
                     appointmentPortfolios:{
                         name:true,
                         price:true,
@@ -298,6 +306,9 @@ export const appointmentController = {
                 },
                 where:{
                     workerId:userId
+                },
+                order:{
+                    appointmentDate:"ASC"
                 }
             })
 
@@ -310,5 +321,62 @@ export const appointmentController = {
         }
     },
 
+    async getAllCalendar(req: Request, res: Response): Promise<void> {
+        try {
+            const page = Number(req.query.page) || 1;
+
+            const limit = Number(req.query.limit) || 4;
+
+            const [appointments, totalAppointments] = await Appointment.findAndCount({
+                relations:{
+                    client:true,
+                    worker:true,
+                    appointmentPortfolios:true,
+                },
+                select:{
+                    id:true,
+                    appointmentDate:true,
+                    client:{
+                        id:true,
+                        firstName:true,
+                        email:true
+                    },
+                    worker:{
+                        id:true,
+                        firstName:true,
+                        email:true
+                    },
+                    appointmentPortfolios:{
+                        name:true,
+                        price:true,
+                    },
+                },
+                order:{
+                    appointmentDate:"ASC",
+                },
+                skip: (page - 1) * limit,
+                take: limit
+            })
+
+            if (totalAppointments === 0) {
+                res.status(404).json({ message: "Appointments not found" });
+                return;
+            }
+
+            const totalPages = Math.ceil(totalAppointments / limit);
+
+            res.status(200).json({
+                appointments: appointments,
+                current_page: page,
+                per_page: limit,
+                total_pages: totalPages,
+            });
+
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to retrieve appointments",
+            });
+        }
+    },
 
 }

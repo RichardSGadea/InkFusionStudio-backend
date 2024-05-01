@@ -325,31 +325,34 @@ export const appointmentController = {
         try {
             const page = Number(req.query.page) || 1;
 
-            const limit = Number(req.query.limit) || 4;
+            const limit = Number(req.query.limit) || 3;
 
             const [appointments, totalAppointments] = await Appointment.findAndCount({
                 relations:{
                     client:true,
                     worker:true,
-                    appointmentPortfolios:true,
+                    appointmentPortfolios:true
                 },
                 select:{
                     id:true,
                     appointmentDate:true,
+                    clientId:true,
                     client:{
                         id:true,
                         firstName:true,
                         email:true
                     },
+                    workerId:true,
                     worker:{
                         id:true,
                         firstName:true,
                         email:true
                     },
                     appointmentPortfolios:{
+                        id:true,
                         name:true,
                         price:true,
-                    },
+                    }
                 },
                 order:{
                     appointmentDate:"ASC",

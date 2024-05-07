@@ -13,7 +13,7 @@ export const appointmentController = {
         try {
             const userId = Number(req.tokenData.userId);
 
-            const { appointment_date, email, name } = req.body;
+            const { appointment_date, emailWorker, nameJob } = req.body;
 
             const today = new Date();
             const year = today.getFullYear();
@@ -23,7 +23,7 @@ export const appointmentController = {
             const appointment = new Date(appointment_date);
 
             //To validate the format of date and email
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            // const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
             const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
             const user = await User.findOne({
@@ -45,15 +45,15 @@ export const appointmentController = {
                 return;
             }
 
-            if (!appointment_date || typeof appointment_date !== "string" || !dateRegex.test(appointment_date)) {
+            if (!appointment_date || typeof appointment_date !== "string" /*||!dateRegex.test(appointment_date)*/) {
                 res.status(400).json({
 
-                    message: 'Remember you must insert a date, and the date format should be YYYY-MM-DD, try again'
+                    message: 'Remember you must insert a date, and the date format should be YYYY-MM-DD HH-MM, try again'
                 });
                 return;
             }
 
-            if (typeof email !== "string" || email.length > 120 || !emailRegex.test(email)) {
+            if (typeof emailWorker !== "string" || emailWorker.length > 120 || !emailRegex.test(emailWorker)) {
                 res.status(400).json({
                     message: 'Invalid or too long email'
                 });
@@ -64,7 +64,7 @@ export const appointmentController = {
             //Verify email 
 
             const foundWorkerByEmail = await User.findOne({
-                where: { email: email, role: UserRoles.WORKER },
+                where: { email: emailWorker, role: UserRoles.WORKER },
             });
 
             if (!foundWorkerByEmail) {
@@ -76,7 +76,7 @@ export const appointmentController = {
             //Verify service
 
             const getService = await Portfolio.findOne({
-                where: { name: name }
+                where: { name: nameJob }
             });
 
             if (!getService) {

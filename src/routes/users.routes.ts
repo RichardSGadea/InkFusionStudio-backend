@@ -12,6 +12,8 @@ router.put("/profile", auth, userController.updateProfile)
 
 router.get("/workers", auth, userController.getWorkers)
 
+router.get("/portfolio", auth, userController.getPortfolios)
+
 //Routes protected
 
 router.get("/allUsers", auth, authorize(["admin"]),userController.getAllUsers)

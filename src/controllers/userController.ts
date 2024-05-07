@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { UserRoles } from "../constants/UserRoles";
 import { Appointment } from "../models/Appointment";
 import { AppointmentPortfolio } from "../models/AppointmentPortfolio";
+import { Portfolio } from "../models/Portfolio";
 
 export const userController = {
     async getProfile(req: Request, res: Response): Promise<void> {
@@ -68,10 +69,6 @@ export const userController = {
     async getWorkers(req: Request, res: Response): Promise<void> {
         try {
 
-            const page = Number(req.query.page) || 1;
-
-            const limit = Number(req.query.limit) || 10;
-
             const [workers, totalWorkers] = await User.findAndCount({
 
                 select: {
@@ -82,8 +79,6 @@ export const userController = {
                 where: {
                     role: UserRoles.WORKER
                 },
-                skip: (page - 1) * limit,
-                take: limit
             });
 
             if (totalWorkers === 0) {
@@ -91,17 +86,38 @@ export const userController = {
                 return;
             }
 
-            const totalPages = Math.ceil(totalWorkers / limit);
-
             res.status(200).json({
                 workers: workers,
-                current_page: page,
-                per_page: limit,
-                total_pages: totalPages,
             });
         } catch (error) {
             res.status(500).json({
                 message: "Failed to retrieve workers",
+            });
+        }
+    },
+
+    async getPortfolios(req: Request, res: Response): Promise<void> {
+        try {
+
+            const [portfolios, totalPortfolios] = await Portfolio.findAndCount({
+
+                select: {
+                    id:true,
+                    name:true,
+                    price:true,                },
+            });
+
+            if (totalPortfolios === 0) {
+                res.status(404).json({ message: "Portfolios not found" });
+                return;
+            }
+
+            res.status(200).json({
+                portfolios: portfolios,
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to retrieve portfolios",
             });
         }
     },

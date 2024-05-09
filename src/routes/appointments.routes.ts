@@ -24,5 +24,8 @@ router.get("/worker", auth,appointmentController.getCalendarWorker)
 
 //Routes protected
 router.get("/general", auth, authorize(["admin"]),appointmentController.getAllCalendar)
+router.delete("/general/:id", auth, authorize(["admin"]),appointmentController.deleteAppointmentById)
+router.put("/general/:id",auth,authorize(["admin"]), appointmentController.updateAppointmentById)
+
 
 export default router;

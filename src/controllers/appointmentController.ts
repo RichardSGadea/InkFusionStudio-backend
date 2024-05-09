@@ -241,12 +241,14 @@ export const appointmentController = {
 
             const appointmentId = Number(req.params.id)
 
+
             const appointmentToDelete = await Appointment.findOne({
                 where: {
                     id: appointmentId,
                     clientId: userId
                 }
-            })
+            }) 
+            
 
             if (!appointmentToDelete) {
                 res.status(404).json({
@@ -407,5 +409,129 @@ export const appointmentController = {
             });
         }
     },
+
+    async deleteAppointmentById(req: Request, res: Response): Promise<void> {
+        try {
+
+            const userId = Number(req.tokenData.userId);
+
+            const user = await User.findOne({
+                where: {
+                    id: userId,
+                }
+            })
+
+            if (!user) {
+                res.status(404).json({ message: "Restart Login, invalid token provided" });
+                return;
+            }
+
+            const appointmentId = Number(req.params.id)
+
+
+            const appointmentToDelete = await Appointment.findOne({
+                where: {
+                    id: appointmentId,
+                }
+            }) 
+            
+
+            if (!appointmentToDelete) {
+                res.status(404).json({
+                    message: "Appointment not found"
+                })
+                return;
+            }
+
+            const appointmentPortfolios = await AppointmentPortfolio.find({where:{appointmentId:appointmentId}})
+            for(let element of appointmentPortfolios){
+                await AppointmentPortfolio.delete(element.id);
+            }
+            
+            await Appointment.delete(appointmentId);
+
+            res.status(200).json({ message: "Appointment deleted successfully" });
+
+        } catch (error) {
+            res.status(500).json({
+                error:error,
+                message: "Failed to delete appointment"
+            })
+        }
+    },
+
+    async updateAppointmentById(req: Request, res: Response): Promise<void> {
+
+        try {
+            
+            const userId = Number(req.tokenData.userId);
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate() + 1;
+            const todayDate = new Date(year, month-1, day);
+
+            const { appointmentDate } = req.body;
+            const newDate = new Date(appointmentDate)
+
+            const user = await User.findOne({
+                where: {
+                    id: userId,
+                }
+            })
+
+            if (!user) {
+                res.status(404).json({ message: "Restart Login, invalid token provided" });
+                return;
+            }
+
+            const appointmentId = Number(req.params.id)
+            
+            
+
+            const appointmentToUpdate = await Appointment.findOne({
+                where: {
+                    id: appointmentId,
+                }
+            })
+
+            if (!appointmentToUpdate) {
+                res.status(404).json({
+                    message: "Appointment not found"
+                })
+                return;
+            }
+
+            if (!appointmentDate) {
+                res.status(400).json({
+                    message: "All fields must be provided",
+                });
+                return;
+            }
+
+            if (newDate < todayDate) {
+                res.status(400).json({
+                    message: 'This day is prior to the current day, try again.'
+                });
+                return;
+            }
+                
+            appointmentToUpdate.appointmentDate = newDate;
+            appointmentToUpdate.updatedAt = todayDate;
+            
+            await Appointment.save(appointmentToUpdate)
+
+            res.status(202).json({
+                message: "Appointment updated successfully"
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to update appointment",
+            });
+        }
+    },
+
 
 }

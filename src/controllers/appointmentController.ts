@@ -9,6 +9,30 @@ import { AppointmentPortfolio } from "../models/AppointmentPortfolio";
 
 export const appointmentController = {
 
+    async getAppointmentById(req: Request, res: Response): Promise<void> {
+        try {
+
+            const appointmentId = Number(req.params.id);
+
+            const appointmentsToShow = await Appointment.findOne({
+                where: { id: appointmentId },
+                
+            })
+
+            if (!appointmentsToShow) {
+                res.status(404).json({ message: "Appointment not found" });
+                return;
+            }
+
+            res.json(appointmentsToShow);
+
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to retrieve appointment info"
+            })
+        }
+    },
+
     async create(req: Request, res: Response): Promise<void> {
         try {
             const userId = Number(req.tokenData.userId);
@@ -47,8 +71,8 @@ export const appointmentController = {
 
             if (!appointment_date || typeof appointment_date !== "string" /*||!dateRegex.test(appointment_date)*/) {
                 res.status(400).json({
-
-                    message: 'Remember you must insert a date, and the date format should be YYYY-MM-DD HH-MM, try again'
+                    
+                    message: `${appointment_date}Remember you must insert a date, and the date format should be YYYY-MM-DD HH-MM, try again`
                 });
                 return;
             }
@@ -137,8 +161,8 @@ export const appointmentController = {
             const day = today.getDate() + 1;
             const todayDate = new Date(year, month-1, day);
 
-            const { AppointmentDate } = req.body;
-            const newDate = new Date(AppointmentDate)
+            const { appointment_date } = req.body;
+            const newDate = new Date(appointment_date)
 
             const user = await User.findOne({
                 where: {
@@ -167,7 +191,7 @@ export const appointmentController = {
                 return;
             }
 
-            if (!AppointmentDate) {
+            if (!appointment_date) {
                 res.status(400).json({
                     message: "All fields must be provided",
                 });

@@ -16,6 +16,8 @@ router.delete("/:id", auth, appointmentController.delete)
 //route only clients
 router.get("/client", auth, appointmentController.getCalendarClient)
 
+router.get("/client/:id", auth, appointmentController.getAppointmentById)
+ 
 //route only workers
 router.get("/worker", auth,appointmentController.getCalendarWorker)
 

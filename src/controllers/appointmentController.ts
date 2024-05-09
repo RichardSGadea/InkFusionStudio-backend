@@ -37,14 +37,14 @@ export const appointmentController = {
         try {
             const userId = Number(req.tokenData.userId);
 
-            const { appointment_date, emailWorker, nameJob } = req.body;
+            const { appointmentDate, emailWorker, nameJob } = req.body;
 
             const today = new Date();
             const year = today.getFullYear();
             const month = today.getMonth() + 1;
             const day = today.getDate() + 1;
             const todayDate = new Date(year, month - 1, day);
-            const appointment = new Date(appointment_date);
+            const appointment = new Date(appointmentDate);
 
             //To validate the format of date and email
             // const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -69,10 +69,10 @@ export const appointmentController = {
                 return;
             }
 
-            if (!appointment_date || typeof appointment_date !== "string" /*||!dateRegex.test(appointment_date)*/) {
+            if (!appointmentDate || typeof appointmentDate !== "string" /*||!dateRegex.test(appointment_date)*/) {
                 res.status(400).json({
                     
-                    message: `${appointment_date}Remember you must insert a date, and the date format should be YYYY-MM-DD HH-MM, try again`
+                    message: `Remember you must insert a date, and the date format should be YYYY-MM-DD HH-MM, try again`
                 });
                 return;
             }
@@ -161,8 +161,8 @@ export const appointmentController = {
             const day = today.getDate() + 1;
             const todayDate = new Date(year, month-1, day);
 
-            const { appointment_date } = req.body;
-            const newDate = new Date(appointment_date)
+            const { appointmentDate } = req.body;
+            const newDate = new Date(appointmentDate)
 
             const user = await User.findOne({
                 where: {
@@ -176,6 +176,8 @@ export const appointmentController = {
             }
 
             const appointmentId = Number(req.params.id)
+            
+            
 
             const appointmentToUpdate = await Appointment.findOne({
                 where: {
@@ -191,7 +193,7 @@ export const appointmentController = {
                 return;
             }
 
-            if (!appointment_date) {
+            if (!appointmentDate) {
                 res.status(400).json({
                     message: "All fields must be provided",
                 });

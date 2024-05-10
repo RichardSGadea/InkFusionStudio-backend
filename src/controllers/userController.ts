@@ -102,9 +102,10 @@ export const userController = {
             const [portfolios, totalPortfolios] = await Portfolio.findAndCount({
 
                 select: {
-                    id:true,
-                    name:true,
-                    price:true,                },
+                    id: true,
+                    name: true,
+                    price: true,
+                },
             });
 
             if (totalPortfolios === 0) {
@@ -135,6 +136,7 @@ export const userController = {
                     firstName: true,
                     email: true,
                     isActive: true,
+                    roleId: true,
                 },
                 where: {
                     role: UserRoles.CLIENT
@@ -176,6 +178,7 @@ export const userController = {
                     firstName: true,
                     email: true,
                     isActive: true,
+                    roleId: true
                 },
                 where: {
                     role: UserRoles.WORKER
@@ -260,6 +263,7 @@ export const userController = {
     async deleteUserById(req: Request, res: Response): Promise<void> {
         try {
             const userId = Number(req.params.id);
+            const roleId = Number(req.params.role);
 
             const userToDelete = await User.findOne({
                 where: {
@@ -273,16 +277,25 @@ export const userController = {
                 })
                 return;
             }
+            let userAppointments;
+            if (roleId === 3) {
+                userAppointments = await Appointment.find({
+                    where: {
+                        clientId: userId
+                    }
+                })
+            } else {
+                userAppointments = await Appointment.find({
+                    where: {
+                        workerId: userId
+                    }
+                })
+            }
 
-            const userAppointments = await Appointment.find({
-                where:{
-                    clientId:userId
-                }
-            })
 
-            for(let appointment of userAppointments){
-                const appointmentPortfolios = await AppointmentPortfolio.find({where:{appointmentId:appointment.id}})
-                for(let element of appointmentPortfolios){
+            for (let appointment of userAppointments) {
+                const appointmentPortfolios = await AppointmentPortfolio.find({ where: { appointmentId: appointment.id } })
+                for (let element of appointmentPortfolios) {
                     await AppointmentPortfolio.delete(element.id);
                 }
                 await Appointment.delete(appointment.id)
@@ -299,4 +312,5 @@ export const userController = {
             })
         }
     },
+
 }

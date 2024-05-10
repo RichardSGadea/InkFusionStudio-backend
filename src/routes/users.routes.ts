@@ -20,7 +20,8 @@ router.get("/allUsers", auth, authorize(["admin"]),userController.getAllUsers)
 router.get("/allWorkers", auth, authorize(["admin"]),userController.getAllWorkers)
 router.get("/:id", auth, authorize(["admin"]),userController.getUserById)
 router.put("/:id", auth, authorize(["admin"]),userController.updateUserById)
-router.delete("/:id", auth, authorize(["admin"]),userController.deleteUserById)
+router.delete("/:id/:role", auth, authorize(["admin"]),userController.deleteUserById)
+
 
 export default router;
 

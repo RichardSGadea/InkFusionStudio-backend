@@ -47,7 +47,14 @@ export const appointmentController = {
             const appointment = new Date(appointmentDate);
 
             //To validate the format of date and email
-            // const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            
+            if (!appointmentDate || !emailWorker || !nameJob) {
+                res.status(400).json({
+                    message: "All fields must be provided"
+                })
+                return;
+            }
+
             const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
             const user = await User.findOne({
@@ -110,6 +117,11 @@ export const appointmentController = {
 
             //Verify the non-existence of the appointment
 
+            const existingDateAppointment = await Appointment.findOne({
+                where: {
+                    appointmentDate:appointment,
+                }
+            });
 
             const existingAppointment = await Appointment.findOne({
                 where: {
@@ -118,7 +130,7 @@ export const appointmentController = {
                 }
             });
 
-            if (existingAppointment) {
+            if (existingAppointment || existingDateAppointment) {
                 res.status(400).json({
                     message: 'Appointment is not available',
                     

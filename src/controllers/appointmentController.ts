@@ -288,6 +288,7 @@ export const appointmentController = {
                     appointmentDate:true,
                     workerId:true,
                     appointmentPortfolios:{
+                        id:true,
                         name:true,
                         price:true,
                     },
@@ -328,6 +329,7 @@ export const appointmentController = {
                         email:true,
                     },
                     appointmentPortfolios:{
+                        id:true,
                         name:true,
                         price:true,
                     },

@@ -37,16 +37,38 @@ export const userController = {
         try {
             const userId = Number(req.tokenData.userId);
 
-            const { password, role, ...resUserData } = req.body
+
+            const { yourPassword, newPassword, role, ...resUserData } = req.body
 
             const userToUpdate = await User.findOne({
+                select: {
+                    id: true,
+                    password: true,
+                },
                 where: { id: userId },
             })
 
-            if (password) {
-                const hashedPassword = bcrypt.hashSync(password, 10);
+            if (yourPassword) {
+                const isPasswordCorrect = bcrypt.compareSync(yourPassword, userToUpdate!.password);
+                if (!isPasswordCorrect) {
+                    res.status(400).json({
+                        message: "Repeat your password"
+                    })
+                    return;
+                }
+            }
+
+            if (newPassword) {
+                if (newPassword.length < 8 || (!newPassword.match(/[a-z]/) && !newPassword.match(/[A-Z]/)) || !newPassword.match(/\d/)) {
+                    res.status(400).json({
+                        message: "Invalid new password"
+                    })
+                    return;
+                }
+                const hashedPassword = bcrypt.hashSync(newPassword, 10);
                 userToUpdate!.password = hashedPassword
             }
+
 
             const updatedUser: Partial<User> = {
                 ...userToUpdate,
